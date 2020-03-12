@@ -2,6 +2,8 @@ require('./server/config/config');
 
 
 const express = require('express');
+const mongoose = require('mongoose');
+
 const app = express();
 
 //Middel
@@ -15,35 +17,20 @@ app.use(bodyparser.json());
 
 
 
+app.use(require('./server/routes/index'));
 
-////////////////////////////////////////////////////////
 
-app.get('/usuario', function(req, res) {
-    res.json('Get User');
+
+//conexions mongoose
+mongoose.connect('mongodb://localhost:27017/cafe', (err, res) => {
+    if (err) throw err;
+    console.log('Base de datos Online');
+
 });
 
-app.post('/usuario', function(req, res) {
 
-    let body = req.body;
 
-    res.json({
-        Persona: body
-    });
-});
-
-app.put('/usuario/:id', function(req, res) {
-
-    let id = req.params.id;
-
-    res.json({
-        id
-    });
-});
-
-app.delete('/usuario', function(req, res) {
-    res.json('Delete User');
-});
-
+//Port
 app.listen(process.env.PORT, () => {
     console.log('Listener in port:', process.env.PORT);
 });
