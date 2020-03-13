@@ -13,6 +13,8 @@ const categoria = require('../models/categoriamodel');
 app.get('/categoria', (req, res) => {
 
     Categoria.find({})
+        .sort('descripcion') //ordenar los datos por la descripcion
+        .populate('usuario', 'nombre email') // schema y campos a llenar
         .exec((err, categorias) => {
             if (err) {
                 return res.status(500).json({
@@ -42,7 +44,7 @@ app.get('/categoria/:id', (req, res) => {
             });
         }
 
-        if (categoriaDB) {
+        if (!categoriaDB) {
             return res.status(500).json({
                 ok: false,
                 err: {
